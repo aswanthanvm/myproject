@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Support Citizen – Buy & Donate Second-Hand Products</title>
+
+  <!-- Font Awesome 6 (free) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      background: #f0f4f8;
+      color: #1e293b;
+      scroll-behavior: smooth;
+      line-height: 1.6;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #e2e8f0; }
+    ::-webkit-scrollbar-thumb { background: #2563eb; border-radius: 10px; }
+
+    /* ===== HEADER ===== */
+    header {
+      background: linear-gradient(135deg, #1e3a5f, #2563eb);
+      color: #fff;
+      padding: 28px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(37, 99, 235, 0.25);
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(255,255,255,0.05) 0%, transparent 60%);
+      animation: shimmer 8s infinite linear;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-30%) rotate(0deg); }
+      100% { transform: translateX(30%) rotate(360deg); }
+    }
+
+    header h1 {
+      font-size: 2.6rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header h1 i { margin-right: 12px; }
+
+    header p {
+      font-size: 1.15rem;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+      margin-top: 4px;
+    }
+
+    /* ===== NAV ===== */
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      background: #1e293b;
+      padding: 14px 20px;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    nav a {
+      color: #f1f5f9;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 6px 12px;
+      border-radius: 30px;
+      transition: 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    nav a i { font-size: 1rem; }
+
+    nav a:hover {
+      background: #2563eb;
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    nav a.active { background: #2563eb; }
+
+    /* ===== HERO ===== */
+    .hero {
+      padding: 70px 24px;
+      text-align: center;
+      background: linear-gradient(120deg, #dbeafe, #dcfce7);
+      animation: fadeIn 1s ease;
+      border-bottom: 4px solid #2563eb;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .hero h1 i { color: #2563eb; margin-right: 12px; }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #334155;
+      max-width: 650px;
+      margin: 12px auto 0;
+    }
+
+    .hero .badge-group {
+      margin-top: 24px;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .hero .badge {
+      background: rgba(37, 99, 235, 0.12);
+      padding: 8px 22px;
+      border-radius: 40px;
+      font-weight: 600;
+      color: #1e3a5f;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(37, 99, 235, 0.2);
+    }
+
+    /* ===== CONTAINER ===== */
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 30px 24px;
+    }
+
+    /* ===== SECTION HEADERS ===== */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .section-header h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .section-header h2 i { color: #2563eb; margin-right: 10px; }
+
+    .section-header .pill {
+      background: #e2e8f0;
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    /* ===== PRODUCT GRID ===== */
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 28px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease;
+      border: 1px solid #eef2f6;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #2563eb, #7c3aed);
+      opacity: 0;
+      transition: 0.3s;
+    }
+
+    .card:hover::after { opacity: 1; }
+
+    .card:hover {
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 18px 40px rgba(37, 99, 235, 0.12);
+      border-color: #b3c9f0;
+    }
+
+    .card .image-wrapper {
+      width: 100%;
+      height: 200px;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #eef2f6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .card .image-wrapper i {
+      font-size: 4rem;
+      color: #94a3b8;
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .card .badge-tag {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #2563eb;
+      color: #fff;
+      padding: 4px 14px;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .card .badge-tag.donate { background: #16a34a; }
+
+    .card h3 {
+      font-size: 1.25rem;
+      margin: 8px 0 4px;
+      font-weight: 600;
+    }
+
+    .card .meta {
+      font-size: 0.85rem;
+      color: #64748b;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+
+    .card .meta i { margin-right: 4px; }
+
+    .price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #b45309;
+      display: inline-block;
+      background: #fef3c7;
+      padding: 2px 18px;
+      border-radius: 40px;
+    }
+
+    .price.free { color: #16a34a; background: #dcfce7; }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #2563eb;
+      border: 2px solid #2563eb;
+      box-shadow: none;
+    }
+
+    .btn-outline:hover {
+      background: #2563eb;
+      color: #fff;
+    }
+
+    .btn-success {
+      background: #16a34a;
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+    }
+
+    .btn-success:hover { background: #15803d; }
+
+    .btn-warning {
+      background: #f59e0b;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+
+    .btn-warning:hover { background: #d97706; }
+
+    /* ===== FORM SECTION ===== */
+    .form-section {
+      background: #ffffff;
+      padding: 32px 36px;
+      border-radius: 24px;
+      margin-top: 48px;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.06);
+      border: 1px solid #eef2f6;
+      transition: 0.3s;
+    }
+
+    .form-section:hover { border-color: #b3c9f0; }
+
+    .form-section h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .form-section h2 i { color: #2563eb; margin-right: 10px; }
+
+    .form-section .subtext {
+      color: #64748b;
+      margin-bottom: 20px;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px 28px;
+    }
+
+    form .full-width { grid-column: 1 / -1; }
+
+    form label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #1e293b;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    form label i { margin-right: 6px; color: #2563eb; }
+
+    form input, form textarea, form select {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 2px solid #e2e8f0;
+      font-size: 0.95rem;
+      transition: 0.25s ease;
+      background: #fafcff;
+    }
+
+    form input:focus, form textarea:focus, form select:focus {
+      border-color: #2563eb;
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+      background: #fff;
+    }
+
+    form textarea { resize: vertical; min-height: 100px; }
+
+    form .btn {
+      grid-column: 1 / -1;
+      justify-self: center;
+      padding: 14px 48px;
+      font-size: 1.05rem;
+      margin-top: 8px;
+    }
+
+    /* ===== STATS BAR ===== */
+    .stats-bar {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 20px;
+      background: #ffffff;
+      border-radius: 60px;
+      padding: 20px 32px;
+      margin: 30px 0 10px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+      border: 1px solid #eef2f6;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .stat-item i {
+      font-size: 2rem;
+      color: #2563eb;
+      background: #dbeafe;
+      padding: 10px;
+      border-radius: 50%;
+    }
+
+    .stat-item .info .number {
+      font-weight: 700;
+      font-size: 1.4rem;
+      line-height: 1.2;
+    }
+
+    .stat-item .info .label {
+      font-size: 0.8rem;
+      color: #64748b;
+    }
+
+    /* ===== MODAL ===== */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.5);
+      backdrop-filter: blur(6px);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-box {
+      background: #fff;
+      padding: 40px 44px;
+      border-radius: 28px;
+      max-width: 420px;
+      width: 90%;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+      text-align: center;
+      animation: scaleIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes scaleIn {
+      from { transform: scale(0.85); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-box h3 {
+      font-size: 1.6rem;
+      margin-bottom: 6px;
+    }
+
+    .modal-box h3 i { color: #2563eb; margin-right: 8px; }
+
+    .modal-box p { color: #64748b; margin-bottom: 20px; }
+
+    .modal-box input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 2px solid #e2e8f0;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+      transition: 0.2s;
+    }
+
+    .modal-box input:focus {
+      border-color: #2563eb;
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    .modal-box .btn-group-modal {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .modal-box .btn-group-modal .btn { flex: 1; min-width: 100px; }
+
+    .modal-box .close-btn {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .modal-box .close-btn:hover { color: #1e293b; transform: rotate(90deg); }
+
+    .modal-box { position: relative; }
+
+    /* ===== FOOTER ===== */
+    footer {
+      text-align: center;
+      padding: 24px;
+      background: #1e293b;
+      color: #f1f5f9;
+      margin-top: 50px;
+      font-size: 0.9rem;
+    }
+
+    footer marquee {
+      display: block;
+      padding: 6px 0;
+    }
+
+    footer .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    footer .social-links a {
+      color: #94a3b8;
+      font-size: 1.4rem;
+      transition: 0.3s;
+    }
+
+    footer .social-links a:hover { color: #fff; transform: translateY(-3px); }
+
+    /* ===== REVEAL ANIMATION ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      header h1 { font-size: 2rem; }
+      .hero h1 { font-size: 2rem; }
+      .hero .badge-group { flex-direction: column; align-items: center; }
+      .container { padding: 20px 16px; }
+      .section-header h2 { font-size: 1.6rem; }
+      form { grid-template-columns: 1fr; }
+      .form-section { padding: 24px 18px; }
+      .stats-bar { flex-direction: column; align-items: center; border-radius: 30px; }
+      nav { gap: 12px; }
+      nav a { font-size: 0.8rem; padding: 4px 10px; }
+      .modal-box { padding: 28px 20px; }
+    }
+
+    @media (max-width: 480px) {
+      header h1 { font-size: 1.6rem; }
+      .hero { padding: 40px 16px; }
+      .card .image-wrapper { height: 160px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== HEADER ===== -->
+  <header>
+    <h1><i class="fas fa-hand-holding-heart"></i> Support Citizen</h1>
+    <p>Affordable second-hand products &amp; donations for everyone</p>
+  </header>
+
+  <!-- ===== NAV ===== -->
+  <nav>
+    <a href="#" class="active"><i class="fas fa-home"></i> Home</a>
+    <a href="#products"><i class="fas fa-box-open"></i> Products</a>
+    <a href="#sell"><i class="fas fa-plus-circle"></i> Sell / Donate</a>
+    <a href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+    <a href="#" onclick="openLogin()"><i class="fas fa-user-circle"></i> Login</a>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero reveal">
+    <h1><i class="fas fa-gem"></i> Buy it, Save Money, Help Others</h1>
+    <p>Middle-class families can sell or donate items, and poor families can buy them at very low cost.</p>
+    <div class="badge-group">
+      <span class="badge"><i class="fas fa-check-circle" style="color:#16a34a;"></i> 1,200+ items sold</span>
+      <span class="badge"><i class="fas fa-users" style="color:#2563eb;"></i> 450+ donors</span>
+      <span class="badge"><i class="fas fa-heart" style="color:#dc2626;"></i> 890+ families helped</span>
+    </div>
+  </section>
+
+  <!-- ===== STATS BAR ===== -->
+  <div class="container" style="padding-top: 10px;">
+    <div class="stats-bar reveal">
+      <div class="stat-item">
+        <i class="fas fa-store"></i>
+        <div class="info">
+          <div class="number">124</div>
+          <div class="label">Active Listings</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <i class="fas fa-hand-holding-usd"></i>
+        <div class="info">
+          <div class="number">₹38K</div>
+          <div class="label">Money Saved</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <i class="fas fa-recycle"></i>
+        <div class="info">
+          <div class="number">1.2K</div>
+          <div class="label">Items Recycled</div>
+        </div>
+      </div>
+      <div class="stat-item">
+        <i class="fas fa-star"></i>
+        <div class="info">
+          <div class="number">4.8</div>
+          <div class="label">Avg. Rating</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PRODUCTS ===== -->
+  <div class="container" id="products">
+    <div class="section-header reveal">
+      <h2><i class="fas fa-box-open"></i> Available Products</h2>
+      <span class="pill"><i class="fas fa-arrow-right"></i> 6 new today</span>
+    </div>
+
+    <div class="products">
+      <!-- Card 1 -->
+      <div class="card reveal">
+        <span class="badge-tag"><i class="fas fa-tag"></i> Used</span>
+        <div class="image-wrapper">
+          <i class="fas fa-book"></i>
+        </div>
+        <h3>Used School Bag</h3>
+        <div class="meta">
+          <span><i class="fas fa-user"></i> Rahul K.</span>
+          <span><i class="fas fa-map-marker-alt"></i> Delhi</span>
+        </div>
+        <span class="price">₹200</span>
+        <div class="btn-group">
+          <a href="#" class="btn"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+          <a href="#" class="btn btn-outline"><i class="fas fa-heart"></i></a>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card reveal">
+        <span class="badge-tag donate"><i class="fas fa-gift"></i> Donation</span>
+        <div class="image-wrapper">
+          <i class="fas fa-tshirt"></i>
+        </div>
+        <h3>Second-Hand Clothes</h3>
+        <div class="meta">
+          <span><i class="fas fa-user"></i> Priya S.</span>
+          <span><i class="fas fa-map-marker-alt"></i> Mumbai</span>
+        </div>
+        <span class="price free">₹0 (Free)</span>
+        <div class="btn-group">
+          <a href="#" class="btn btn-success"><i class="fas fa-gift"></i> Claim</a>
+          <a href="#" class="btn btn-outline"><i class="fas fa-heart"></i></a>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card reveal">
+        <span class="badge-tag"><i class="fas fa-tag"></i> Used</span>
+        <div class="image-wrapper">
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+        <h3>Used Mobile Phone</h3>
+        <div class="meta">
+          <span><i class="fas fa-user"></i> Amit V.</span>
+          <span><i class="fas fa-map-marker-alt"></i> Bengaluru</span>
+        </div>
+        <span class="price">₹1,500</span>
+        <div class="btn-group">
+          <a href="#" class="btn"><i class="fas fa-shopping-cart"></i> Buy Now</a>
+          <a href="#" class="btn btn-outline"><i class="fas fa-heart"></i></a>
+        </div>
+      </div>
+
+      <!-- Card 4 (extra) -->
+      <div class="card reveal">
+        <span class="badge-tag donate"><i class="fas fa-gift"></i> Donation</span>
+        <div class="image-wrapper">
+          <i class="fas fa-chair"></i>
+        </div>
+        <h3>Study Table &amp; Chair</h3>
+        <div class="meta">
+          <span><i class="fas fa-user"></i> Meera D.</span>
+          <span><i class="fas fa-map-marker-alt"></i> Pune</span>
+        </div>
+        <span class="price free">₹0 (Free)</span>
+        <div class="btn-group">
+          <a href="#" class="btn btn-success"><i class="fas fa-gift"></i> Claim</a>
+          <a href="#" class="btn btn-outline"><i class="fas fa-heart"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== FORM SECTION ===== -->
+    <div class="form-section reveal" id="sell">
+      <h2><i class="fas fa-plus-circle"></i> Sell or Donate a Product</h2>
+      <p class="subtext"><i class="fas fa-info-circle" style="color:#2563eb;"></i> Fill in the details and help someone in need. Set price ₹0 for free donation.</p>
+
+      <form onsubmit="event.preventDefault(); alert('✅ Product submitted successfully! Thank you for supporting the community.');">
+        <div class="full-width">
+          <label><i class="fas fa-tag"></i> Product Name</label>
+          <input type="text" placeholder="Enter product name" required />
+        </div>
+
+        <div class="full-width">
+          <label><i class="fas fa-align-left"></i> Description</label>
+          <textarea placeholder="Describe the product in detail (condition, brand, color, etc.)" required></textarea>
+        </div>
+
+        <div>
+          <label><i class="fas fa-rupee-sign"></i> Price (₹)</label>
+          <input type="number" placeholder="Enter 0 for donation" required />
+        </div>
+
+        <div>
+          <label><i class="fas fa-map-marker-alt"></i> City</label>
+          <input type="text" placeholder="Your city" required />
+        </div>
+
+        <div>
+          <label><i class="fas fa-phone"></i> Contact Number</label>
+          <input type="tel" placeholder="Your phone number" required />
+        </div>
+
+        <div>
+          <label><i class="fas fa-tag"></i> Category</label>
+          <select>
+            <option>Electronics</option>
+            <option selected>Furniture</option>
+            <option>Clothing</option>
+            <option>Books &amp; Stationery</option>
+            <option>Kitchen items</option>
+            <option>Other</option>
+          </select>
+        </div>
+
+        <button class="btn btn-success" type="submit"><i class="fas fa-paper-plane"></i> Submit Product</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== MODAL (Login) ===== -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal-box">
+      <button class="close-btn" onclick="closeLogin()"><i class="fas fa-times"></i></button>
+      <h3><i class="fas fa-user-circle"></i> Welcome Back</h3>
+      <p>Login to manage your listings and donations.</p>
+      <input type="text" id="username" placeholder="Username" />
+      <input type="password" id="password" placeholder="Password" />
+      <div class="btn-group-modal">
+        <button class="btn" onclick="loginUser()"><i class="fas fa-sign-in-alt"></i> Login</button>
+        <button class="btn btn-outline" onclick="closeLogin()"><i class="fas fa-times"></i> Close</button>
+      </div>
+      <p style="margin-top: 14px; font-size: 0.8rem; color: #94a3b8;">
+        <i class="fas fa-info-circle"></i> Demo: any username / password works
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <footer id="contact">
+    <marquee behavior="scroll" direction="left" scrollamount="4">
+      <i class="fas fa-heart" style="color: #ef4444;"></i> © 2026 Support Citizen | Social help with low investment | 
+      <i class="fas fa-hand-holding-heart"></i> Together we can make a difference
+    </marquee>
+    <div class="social-links">
+      <a href="#"><i class="fab fa-facebook-f"></i></a>
+      <a href="#"><i class="fab fa-twitter"></i></a>
+      <a href="#"><i class="fab fa-instagram"></i></a>
+      <a href="#"><i class="fab fa-youtube"></i></a>
+    </div>
+  </footer>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script>
+    // ===== REVEAL ON SCROLL =====
+    const reveals = document.querySelectorAll('.reveal');
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -20px 0px' });
+
+    reveals.forEach(el => revealObserver.observe(el));
+
+    // ===== LOGIN MODAL =====
+    function openLogin() {
+      document.getElementById('loginModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLogin() {
+      document.getElementById('loginModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function loginUser() {
+      const username = document.getElementById('username').value || 'Guest';
+      alert(`✅ Welcome, ${username}! You are now logged in.`);
+      closeLogin();
+    }
+
+    // Close modal on overlay click
+    document.getElementById('loginModal').addEventListener('click', function(e) {
+      if (e.target === this) closeLogin();
+    });
+
+    // Close with Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeLogin();
+    });
+
+    // ===== CARD INTERACTION: "Claim" / "Buy" buttons show feedback =====
+    document.querySelectorAll('.btn:not(.btn-outline)').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const text = this.innerText.trim();
+        if (text.includes('Buy') || text.includes('Claim')) {
+          alert('✅ Item added to your cart! Check your dashboard.');
+        } else if (text.includes('Submit')) {
+          // already handled by form submit
+        } else if (text.includes('Login')) {
+          openLogin();
+        }
+      });
+    });
+
+    // ===== STATS ANIMATION (counter) =====
+    function animateStats() {
+      const statNumbers = document.querySelectorAll('.stat-item .number');
+      statNumbers.forEach(el => {
+        const text = el.innerText;
+        const num = parseFloat(text.replace(/[^0-9.]/g, ''));
+        if (!isNaN(num) && num < 1000) {
+          let current = 0;
+          const step = Math.ceil(num / 30);
+          const interval = setInterval(() => {
+            current += step;
+            if (current >= num) {
+              el.innerText = text;
+              clearInterval(interval);
+            } else {
+              el.innerText = current + (text.includes('K') ? 'K' : '');
+            }
+          }, 30);
+        }
+      });
+    }
+
+    // Trigger counter when stats become visible
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          animateStats();
+          statsObserver.disconnect();
+        }
+      });
+    }, { threshold: 0.3 });
+
+    const statsBar = document.querySelector('.stats-bar');
+    if (statsBar) statsObserver.observe(statsBar);
+
+    // ===== CONSOLE WELCOME =====
+    console.log('%c🍀 Support Citizen - Advanced Version', 'font-size: 18px; font-weight: bold; color: #2563eb;');
+    console.log('%c💡 Buy, Sell & Donate second-hand products to help the community.', 'font-size: 14px; color: #334155;');
+  </script>
+</body>
+</html>
